@@ -33,16 +33,31 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS middleware
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://job-sphere-topaz.vercel.app",
-    "https://job-sphere-g4k9920vs-bharats-projects-70b384b6.vercel.app"
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://job-sphere-topaz.vercel.app',
+      'https://job-sphere-g4k9920vs-bharats-projects-70b384b6.vercel.app',
+      'https://jobsphere-backend-vt69.onrender.com'
+    ];
+    
+    // Allow all origins in production (you can restrict this later)
+    if (process.env.NODE_ENV === 'production' || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Handle preflight requests
-app.options("*", cors());
+app.options('*', cors());
 
 // Logger middleware
 if (process.env.NODE_ENV === 'development') {
