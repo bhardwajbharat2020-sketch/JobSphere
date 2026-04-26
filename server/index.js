@@ -33,8 +33,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
+  origin: [
+    "http://localhost:5173",
+    "https://job-sphere-topaz.vercel.app"
+  ],
+  credentials: true
 }));
 
 // Logger middleware
