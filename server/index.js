@@ -35,10 +35,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://job-sphere-topaz.vercel.app"
+    "https://job-sphere-topaz.vercel.app",
+    "https://job-sphere-g4k9920vs-bharats-projects-70b384b6.vercel.app"
   ],
   credentials: true
 }));
+
+// Handle preflight requests
+app.options("*", cors());
 
 // Logger middleware
 if (process.env.NODE_ENV === 'development') {
